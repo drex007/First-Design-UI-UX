@@ -5,28 +5,60 @@ import Button from '../buttons/Button'
 const Analytics = () => {
   return (
     <div>
+      <div className='rounded-sm bg-black/20 py-8 px-16  '>
+        <p className='text-white flex justify-center font-irish text-[30px]'>Daily Tasks</p>
+      </div>
+
       <div>
-        <p className='text-white flex justify-center'>ANALYTICS</p>
-        <div className='flex items-center space-x-8'>
-          <div>
-            <img src={analytic} alt="" className='' />
-
+        <div className='border border-solid p-3 my-8 cursor-pointer'>
+          <div className='text-white flex justify-between font-Montserrat'>
+            <p className='tracking-wider'>Retweet Tweet</p>
+            <p></p>
           </div>
-          <div>
-            <p className='text-white text-[40px] font-bold'>Built-In Analytics To Track your Nfts.</p>
-            <p className='text-white/70 w-2/3 font-light'>Use our built in analytical dashboard to pull valuable insights and monitor the value of your Krypto portfolio over time.</p>
-            <p className=' my-16'></p>
-            <Button
 
-              text={"VIEW OUR PRICING"}
-              bg={"primary-button"}
-            />
+          <div className='text-white flex justify-between font-Montserrat'>
+            <p className='tracking-wider'>End date</p>
+            <p className='tracking-wider'>2024-09-19</p>
           </div>
 
         </div>
 
 
       </div>
+      <div>
+        <div className='border border-solid p-3 my-8 cursor-pointer'>
+          <div className='text-white flex justify-between font-Montserrat'>
+            <p className='tracking-wider'>Follow @Krypton on twitter</p>
+            <p></p>
+          </div>
+
+          <div className='text-white flex justify-between font-Montserrat'>
+            <p className='tracking-wider'>End date</p>
+            <p className='tracking-wider'>2024-09-19</p>
+          </div>
+
+        </div>
+
+
+      </div>
+      <div>
+        <div className='border border-solid p-3 my-8 cursor-pointer'>
+          <div className='text-white flex justify-between font-Montserrat'>
+            <p className='tracking-wider'>Like this tweet</p>
+            <p></p>
+          </div>
+
+          <div className='text-white flex justify-between font-Montserrat'>
+            <p className='tracking-wider'>End date</p>
+            <p className='tracking-wider'>2024-09-19</p>
+          </div>
+
+        </div>
+
+
+      </div>
+
+
     </div>
   )
 }

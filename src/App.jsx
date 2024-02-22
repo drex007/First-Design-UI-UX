@@ -17,9 +17,9 @@ function App() {
         <Hero />
         <Featured />
         <Analytics />
-        <Testimonial />
+        {/* <Testimonial /> */}
         <Getstarted />
-        <Footer />
+        {/* <Footer /> */}
        
 
 

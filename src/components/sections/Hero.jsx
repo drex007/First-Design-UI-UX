@@ -14,11 +14,11 @@ const Hero = () => {
         </div>
         <div className='my-4 flex space-x-4'>
           <Button
-            text={"BUY NFT"}
+            text={"Connect Twitter"}
             bg={'primary-button'} 
           />
           <Button
-            text={"SELL NFT"}
+            text={"Connect Telegram"}
             border= {"white"}
           />
         </div>
