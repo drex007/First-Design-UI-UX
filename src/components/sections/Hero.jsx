@@ -4,22 +4,22 @@ import Button from '../buttons/Button'
 
 const Hero = () => {
   return (
-    <div className=' mt-32 py-8 flex justify-between'>
+    <div className='mt-10 py-8 lg:flex lg:justify-between sm:grid'>
       <div>
-        <div className='text-[40px] w-2/3 text-white font-bold'>
-          Discover and collect rate
-          <p>Nfts</p>
-          <p className='text-[12px] font-light'>The  most secure marketplace for buying and
-            selling of unique crypto nfts.</p>
+        <div className='lg:w-4/6 w-full lg:text-[80px] text-[40px]  text-white font-bold'>
+          Discover, Interact and Get Rewarded
+    
+          <p className='text-[15px] font-light mt-8'>Your Favourite Gamified Social Launchpad on the Solana Blockchain. Get in Early!</p>
         </div>
-        <div className='my-4 flex space-x-4'>
+        <div className='mt-10 flex space-x-4'>
           <Button
+
             text={"Connect Twitter"}
-            bg={'primary-button'} 
+            bg={'primary-button'}
           />
           <Button
             text={"Connect Telegram"}
-            border= {"white"}
+            border={"white"}
           />
         </div>
       </div>

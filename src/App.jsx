@@ -12,7 +12,7 @@ function App() {
 
   return (
     <>
-      <div className=' bg-primary px-60' >
+      <div className=' bg-primary lg:px-20 px-4 sm:w-full' >
         <Header />
         <Hero />
         <Featured />

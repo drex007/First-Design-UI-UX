@@ -15,11 +15,11 @@ const Header = () => {
       <div className='text-[20px] font-bold'>
         <p>KRYPTO</p>
       </div>
-      <div className='text-[15px] font-poppins flex space-x-16'>
-        <p className=''>about</p>
-        <p className=''>pricing</p>
+      <div className='hidden text-[15px] font-poppins lg:flex space-x-16'>
+        {/* <p className=''>about</p> */}
+        {/* <p className=''>pricing</p>
         <p className=''>contact</p>
-        <p className=''>buy nfts</p>
+        <p className=''>buy nfts</p> */}
       </div>
     </div>
   )
