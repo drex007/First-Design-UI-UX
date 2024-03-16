@@ -1,30 +1,22 @@
-import { useState } from 'react'
-import Header from './components/sections/Header'
-import Hero from './components/sections/Hero'
-import Featured from './components/sections/Featured'
-import Analytics from './components/sections/Analytics'
-import Testimonial from './components/sections/Testimonial'
-import Getstarted from './components/sections/Getstarted'
-import Footer from './components/sections/Footer'
+import { useState, useEffect } from 'react'
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import Landing from './components/sections/Landing';
+import Signup from './components/sections/Signup';
+
 
 function App() {
 
 
+
+
   return (
-    <>
-      <div className=' bg-primary lg:px-20 px-4 sm:w-full' >
-        <Header />
-        <Hero />
-        <Featured />
-        <Analytics />
-        {/* <Testimonial /> */}
-        <Getstarted />
-        {/* <Footer /> */}
-       
-
-
-      </div>
-    </>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Landing />} />
+      
+        <Route path="/signup" element={<Signup />} />
+      </Routes>
+    </BrowserRouter>
   )
 }
 

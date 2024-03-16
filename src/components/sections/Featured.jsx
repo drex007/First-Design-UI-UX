@@ -19,8 +19,6 @@ const Featured = () => {
           <img src={image2} alt="" className='lg:w-[150px] w-[80px] mx-auto ' />
           <h1 className='text-white text-[20px] font-irish my-2 text-center tracking-widest' >Points Earned</h1>
           <h1 className='text-white text-[20px] font-irish my-2 text-center tracking-wider' >80,000,000 KRP</h1>
-
-
         </div>
 
         <div className='flex flex-col border border-solid lg:w-1/2 p-10 rounded-lg justify-center'>
