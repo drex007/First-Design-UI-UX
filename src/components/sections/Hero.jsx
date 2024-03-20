@@ -1,11 +1,16 @@
-import React from 'react'
+import React, {useContext, useEffect} from 'react'
 import nft from '../../assets/nft.svg'
-import Button from '../buttons/Button'
 import { Link } from 'react-router-dom'
-import axios from 'axios'
+import { AppContext } from '../../context'
+
 
 const Hero = () => {
- 
+  const {login, currentUser, setCurrentUser} = useContext(AppContext)
+  const loggedInUser = localStorage.getItem("monkey-loggedIn")
+
+
+
+
   return (
     <div className='mt-10 py-8 lg:flex lg:justify-between sm:grid'>
       <div>
@@ -14,18 +19,19 @@ const Hero = () => {
 
           <p className='text-[15px] font-light mt-8'>Your Favourite Gamified Social Launchpad on the Solana Blockchain. Get in Early!</p>
         </div>
-        <div className='mt-10 flex space-x-4'>
-          <Button
+        {loggedInUser? <div className='my-3'>
+          <button  className='py-2 px-12 text-white font-poppins border bg-primary-button cursor-pointer font-semibold'>@{JSON.parse(loggedInUser)?.x_username}</button>
 
-            text={"Login"}
-            bg={'primary-button'}
-          />
-          <Link to={'/signup'}>    <Button
-            text={"Sign up"}
-            border={"white"}
-          />
+        </div>:
+        
+        <div className='mt-10 flex space-x-4'>
+          <button  onClick ={()=>login()} className='py-2 px-12 text-white font-poppins border bg-primary-button cursor-pointer font-semibold'>Login</button>
+
+          <Link to={'/signup'}>
+            <button className='py-2 px-12 text-white font-poppins border bg-primary cursor-pointer font-semibold'>Create Account</button>
           </Link>
         </div>
+        }
       </div>
       {/* Image div */}
       <div>

@@ -29,7 +29,7 @@ export default {
         "primary": '#050133',
         "primary-shadow": '#3E7EEB',
         "primary-button": '#7167ED',
-        "primary-card":"#0E0949"
+        "primary-card": "#0E0949"
       },
       fontFamily: {
         lato: ["Lato", "sans-serif"],
