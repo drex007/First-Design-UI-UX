@@ -1,9 +1,8 @@
 import React from 'react'
-import axios from 'axios'
 import { AppContext } from '../../context'
 import { useContext } from 'react'
-import { ThreeCircles } from 'react-loader-spinner'
 import ButtonLoaderOne from '../buttons/ButtonLoaderOne'
+
 
 
 const Signup = () => {
