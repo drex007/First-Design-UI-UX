@@ -7,7 +7,7 @@ const LoggedIn = () => {
 
     const loggedInUser = localStorage.getItem("monkey-loggedIn")
 
-    const { getUser, currentUser } = useContext(AppContext)
+    const { login, currentUser } = useContext(AppContext)
     const getOauthDetails = () => {
         const url = window.location.href;
         // Create a URLSearchParams object with the query parameters
@@ -22,7 +22,7 @@ const LoggedIn = () => {
     useEffect(() => {
         const data = getOauthDetails()
         if (data) {
-            getUser(data)
+            login(data)
         }
 
       

@@ -5,7 +5,7 @@ import { AppContext } from '../../context'
 
 
 const Hero = () => {
-  const {login, currentUser, setCurrentUser} = useContext(AppContext)
+  const {getXLoginOauth, currentUser, setCurrentUser} = useContext(AppContext)
   const loggedInUser = localStorage.getItem("monkey-loggedIn")
 
 
@@ -25,7 +25,7 @@ const Hero = () => {
         </div>:
         
         <div className='mt-10 flex space-x-4'>
-          <button  onClick ={()=>login()} className='py-2 px-12 text-white font-poppins border bg-primary-button cursor-pointer font-semibold'>Login</button>
+          <button  onClick ={()=>getXLoginOauth()} className='py-2 px-12 text-white font-poppins border bg-primary-button cursor-pointer font-semibold'>Login</button>
 
           <Link to={'/signup'}>
             <button className='py-2 px-12 text-white font-poppins border bg-primary cursor-pointer font-semibold'>Create Account</button>

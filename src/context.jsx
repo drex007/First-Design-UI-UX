@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-
+import toast, { Toaster } from 'react-hot-toast';
 
 export const AppContext = React.createContext();
 
 
 const backendUrl = import.meta.env.VITE_BACKEND_URL
 const frontendUrl = import.meta.env.VITE_FRONTEND_URL
+const TelegramBotLink = import.meta.env.VITE_TELEGRAM_BOT_LINK
 
 export const AppContextProvider = ({ children }) => {
   const [tasks, setTasks] = useState([]);
@@ -15,11 +16,14 @@ export const AppContextProvider = ({ children }) => {
   const [connectTwitterLoadingState, setConnectTwitterLoadingState] = useState(false)
   const [TwitterDetailsLoadingState, setGetTwitterDetailsLoadingState] = useState(false)
   const [currentUser, setCurrentUser] = useState({})
+  const [currentTelegramUser, setCurrentTelegramUser] = useState({})
+  const [telegramLoadingState, setTelegramLoadingState] = useState(false)
+  const [signUpLoadingState, setSignUpLoadingState] = useState(false)
 
-  const login = async () => {
+  const getXLoginOauth = async () => {
 
     try {
-      const account = await axios.get(`${backendUrl}/account/login`)
+      const account = await axios.get(`${backendUrl}/account/login-x-oauth`)
       setLoginOauth(account.data)
       window.open(`https://api.twitter.com/oauth/authorize?oauth_token=${loginOauth?.oauth_token}&oauth_token_secret=${loginOauth?.oauth_token_secret}&oauth_callback_confirmed=true`)
 
@@ -28,14 +32,14 @@ export const AppContextProvider = ({ children }) => {
 
   }
 
-  const getUser = async (data) => {
+  const login = async (data) => {
     try {
-      const req = await axios.post(`${backendUrl}/account/user`, data)
+      const req = await axios.post(`${backendUrl}/account/login`, data)
       setCurrentUser(req.data)
       localStorage.setItem("monkey-loggedIn", JSON.stringify(req.data))
-    
+
     } catch (error) {
-      
+
     }
   }
 
@@ -69,7 +73,7 @@ export const AppContextProvider = ({ children }) => {
     setGetTwitterDetailsLoadingState(true)
     try {
       const oauthReq = await axios.post(`${backendUrl}/account/get-x-details`, data)
-      localStorage.setItem('monkey-fi', JSON.stringify(oauthReq.data))
+      localStorage.setItem('monkeyfi-twitter', JSON.stringify(oauthReq.data))
       setGetTwitterDetailsLoadingState(false)
 
 
@@ -80,6 +84,38 @@ export const AppContextProvider = ({ children }) => {
 
   }
 
+  const connectTelegramBot = async () => {
+    setTelegramLoadingState(true)
+    try {
+      window.open(TelegramBotLink)
+      setCurrentTelegramUser(false)
+
+    } catch (error) {
+      setCurrentTelegramUser(false)
+
+    }
+  }
+
+  const signUp = async (data) => {
+    setSignUpLoadingState(true)
+    try {
+      if (!data?.x_id || data?.x_id === '') return toast.error("Please connect twitter")
+      if (!data?.tg_id || data?.tg_id === '') return toast.error("Please connect twitter")
+      const req = await axios.post(`${backendUrl}/account/signup`, data)
+      if (req.status == 200) {
+        toast.success("Signup successful")
+        setSignUpLoadingState(false)
+        return true
+      }
+      
+    } catch (error) {
+      setSignUpLoadingState(false)
+      toast.error("Signup failed, try again")
+      return false
+
+    }
+
+  }
 
 
   return (
@@ -95,10 +131,18 @@ export const AppContextProvider = ({ children }) => {
         TwitterDetailsLoadingState,
         setGetTwitterDetailsLoadingState,
         getUserTwitterDetails,
+        getXLoginOauth,
         login,
-        getUser,
         currentUser,
-        setCurrentUser
+        setCurrentUser,
+        connectTelegramBot,
+        currentTelegramUser,
+        setCurrentTelegramUser,
+        telegramLoadingState,
+        setTelegramLoadingState,
+        signUp,
+        signUpLoadingState,
+        setSignUpLoadingState
 
       }} >
         {children}
