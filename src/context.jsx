@@ -19,7 +19,9 @@ export const AppContextProvider = ({ children }) => {
   const [currentTelegramUser, setCurrentTelegramUser] = useState({})
   const [telegramLoadingState, setTelegramLoadingState] = useState(false)
   const [signUpLoadingState, setSignUpLoadingState] = useState(false)
+  const [account, setAccount] = useState({})
 
+  //For getting users request token on Login
   const getXLoginOauth = async () => {
 
     try {
@@ -31,28 +33,30 @@ export const AppContextProvider = ({ children }) => {
     }
 
   }
-
+ //For getting user account from backend after giving acccess to twitter on login, paylod {oauth_token and oauth_verifier}
   const login = async (data) => {
     try {
       const req = await axios.post(`${backendUrl}/account/login`, data)
       setCurrentUser(req.data)
-      localStorage.setItem("monkey-loggedIn", JSON.stringify(req.data))
+      setAccount(req.data)
+      localStorage.setItem("monkeyfi-loggedIn", JSON.stringify(req.data))
 
     } catch (error) {
 
     }
   }
-
+  //For getting tasks available
   const getTasks = async () => {
     try {
       const task = await axios.get(`${backendUrl}/task/all`)
       setTasks(task.data)
+      console.log(task.data, 'TASKS');
 
     } catch (error) {
     }
 
   }
-
+  //For getting user request token when trying to connect account on sign up
   const getTwitterOauth = async () => {
     setConnectTwitterLoadingState(true)
     try {
@@ -68,7 +72,7 @@ export const AppContextProvider = ({ children }) => {
 
   }
 
-
+// For getting user twitter details on connecting twitter account
   const getUserTwitterDetails = async (data) => {
     setGetTwitterDetailsLoadingState(true)
     try {
@@ -83,7 +87,7 @@ export const AppContextProvider = ({ children }) => {
     }
 
   }
-
+ //For redirecting user to twitter bot page
   const connectTelegramBot = async () => {
     setTelegramLoadingState(true)
     try {
@@ -96,6 +100,7 @@ export const AppContextProvider = ({ children }) => {
     }
   }
 
+  //For completing user sign up after connecting twitter and telegram account 
   const signUp = async (data) => {
     setSignUpLoadingState(true)
     try {
@@ -113,6 +118,28 @@ export const AppContextProvider = ({ children }) => {
       toast.error("Signup failed, try again")
       return false
 
+    }
+
+  }
+
+  //For adding each account to task once yhe link is clicked 
+  const addAccountToTask = async (data) => {
+    try {
+      const req = await axios.post(`${backendUrl}/task/add-account`, data)
+     
+    } catch (error) {
+      
+    }
+
+  }
+
+  const getUserAccount = async (data) => {
+    try {
+      const req = await axios.post(`${backendUrl}/account/user`, data)
+      setAccount(req.data)
+     
+    } catch (error) {
+      
     }
 
   }
@@ -142,7 +169,10 @@ export const AppContextProvider = ({ children }) => {
         setTelegramLoadingState,
         signUp,
         signUpLoadingState,
-        setSignUpLoadingState
+        setSignUpLoadingState,
+        addAccountToTask,
+        account,
+        getUserAccount
 
       }} >
         {children}

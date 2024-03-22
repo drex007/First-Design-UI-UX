@@ -3,11 +3,12 @@ import Landing from './Landing'
 import { AppContext } from '../../context'
 import { Link } from 'react-router-dom'
 import { useNavigate } from 'react-router-dom'
+import { data } from 'autoprefixer'
 const LoggedIn = () => {
 
-    const loggedInUser = localStorage.getItem("monkey-loggedIn")
+    const loggedInUser = localStorage.getItem("monkeyfi-loggedIn")
 
-    const { login, currentUser } = useContext(AppContext)
+    const { login, currentUser, account, getUserAccount } = useContext(AppContext)
     const getOauthDetails = () => {
         const url = window.location.href;
         // Create a URLSearchParams object with the query parameters
@@ -33,6 +34,13 @@ const LoggedIn = () => {
     useEffect(() => {
     
     }, [currentUser])
+
+    useEffect(() => {
+        const data = {x_id: JSON.parse(loggedInUser)?.x_id}
+        getUserAccount(data)
+     
+    }, [])
+    
     
 
     return (

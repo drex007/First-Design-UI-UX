@@ -6,7 +6,7 @@ import { AppContext } from '../../context'
 
 const Hero = () => {
   const {getXLoginOauth, currentUser, setCurrentUser} = useContext(AppContext)
-  const loggedInUser = localStorage.getItem("monkey-loggedIn")
+  const loggedInUser = localStorage.getItem("monkeyfi-loggedIn")
 
 
 
