@@ -1,19 +1,58 @@
 import React, { useEffect, useState } from 'react'
-import analytic from '../../assets/analytics.svg'
-import Button from '../buttons/Button'
 import { AppContext } from '../../context'
 import { useContext } from 'react'
 import PendingTaskLoader from '../buttons/PendingTask'
+import ButtonLoaderOne from '../buttons/ButtonLoaderOne'
 
 const Analytics = () => {
-  const { getTasks, tasks, addAccountToTask } = useContext(AppContext)
+
+  const { getTasks, tasks, addAccountToTask, redeemReferralCode, redeemLoadingState, account, connectTelegramBot, updateTelegram, setCurrentTelegramUser } = useContext(AppContext)
   const loggedInUser = localStorage.getItem("monkeyfi-loggedIn")
   var currentDate = new Date()
-  console.log(currentDate, new Date('2024-03-22"'));
+
+  const localStorageTelegram = localStorage.getItem("monkeyfi-telegram")
+  const [reload, setReload] = useState(false)
+
+
+  const [formData, setFormData] = useState({
+    x_id: '',
+    referee_code: ''
+  })
+
+  const [telegramformData, setTelegramFormData] = useState({
+    x_id: '',
+    referee_code: ''
+  })
 
   const taskLinkButton = async (link) => {
     window.open(link)
+  }
 
+  const getTelegramDetails = () => {
+    const url = window.location.href;
+    // Create a URLSearchParams object with the query parameters
+    const params = new URLSearchParams(new URL(url).search);
+    const tg_id = params.get("tg_id");
+    const tg_username = params.get("username");
+    if (tg_id && tg_username) {
+      //Update Users tg
+      if (!account?.tg_id) {
+        const data = {
+          tg_id: tg_id,
+          tg_username: tg_username,
+          x_id: account?.x_id,
+        }
+        updateTelegram(data)
+
+      }
+
+      return { tg_id: tg_id, tg_username: tg_username }
+    }
+  }
+
+
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value, x_id: JSON.parse(loggedInUser)?.x_id })
 
   }
 
@@ -22,18 +61,66 @@ const Analytics = () => {
   useEffect(() => {
     getTasks()
 
-  }, [])
+  }, [reload])
 
+
+
+  useEffect(() => {
+    const data = getTelegramDetails()
+    if (data) {
+      localStorage.setItem("monkeyfi-telegram", JSON.stringify(data))
+      setCurrentTelegramUser(data)
+    }
+
+  }, [account])
 
   return (
     <div>
-      <div className='rounded-sm bg-black/20 py-8 px-16  '>
-        <p className='text-white flex justify-center font-irish text-[30px]'>Daily Tasks</p>
+      {!account?.referee || !account?.tg_id ?
+
+        <div>
+          <p className='text-white  bg-black/20 py-4 flex justify-center font-irish text-[20px]'>One Time Tasks</p>
+          <div
+            className='border border-solid p-3 my-8 cursor-pointer rounded-tr-2xl rounded-bl-2xl'>
+            <div className='text-white  font-Montserrat'>
+              <p className='tracking-wider my-2'>Reedem referral code</p>
+              <div className='flex justify-between'>
+                <input type="text" name="referee_code" id="" placeholder='Enter referee code' className='bg-transparent outline-none rounded-md py-2 px-2  w-1/2 font-poppins font-light' onChange={(e) => handleChange(e)} />
+                {redeemLoadingState ?
+                  <ButtonLoaderOne />
+                  :
+                  <button
+
+                    onClick={() => redeemReferralCode(formData)}
+                    className='bg-primary-button py-2 px-4 text-[15px] rounded-md'>Redeem</button>
+                }
+              </div>
+            </div>
+
+          </div>
+
+          {!account?.tg_id ? <div
+            className='border border-solid p-3 my-8 cursor-pointer rounded-tr-2xl rounded-bl-2xl' onClick={() => connectTelegramBot()}>
+            <div className='text-white  font-Montserrat' >
+              <p className='tracking-wider my-2'>Connect Telegram</p>
+            </div>
+
+          </div> :
+            " "
+          }
+
+        </div>
+
+        : ""
+
+      }
+      <div className='rounded-sm bg-black/20 py-4 px-16  '>
+        <p className='text-white flex justify-center font-irish text-[20px]'>Daily Tasks</p>
       </div>
       <div className='lg:text-[15px] text-[12px]'>
 
         {tasks?.map((e, i) => (
-          <>
+          <div key={i}>
             {e?.account.includes(JSON.parse(loggedInUser)?.id) ? "" :
 
               <div
@@ -42,7 +129,8 @@ const Analytics = () => {
                   const data = { task_id: e?.id, x_id: JSON.parse(loggedInUser)?.x_id }
                   taskLinkButton(e?.task_link)
                   addAccountToTask(data)
-                  getTasks()
+                  setReload(true)
+  
                 }}
 
                 className='border border-solid p-3 my-8 cursor-pointer rounded-tr-2xl rounded-bl-2xl'>
@@ -59,23 +147,22 @@ const Analytics = () => {
               </div>
             }
 
-          </>
+          </div>
         ))}
 
       </div>
 
-      <div className='rounded-sm bg-black/20 py-8 px-16 my-8 '>
-        <p className='flex text-white justify-center font-irish text-[30px] items-center'>Pending Tasks  <div className='ml-4'><PendingTaskLoader /></div> </p>
+      <div className='rounded-sm bg-black/20 py-4 px-16 my-8 '>
+        <p className='flex text-white justify-center font-irish text-[20px] items-center'>Pending Tasks  <div className='ml-4'><PendingTaskLoader /></div> </p>
       </div>
       <div className='lg:text-[15px] text-[12px]'>
 
         {tasks?.map((e, i) => (
-          <>
-            {currentDate > new Date(e?.end_date)? "" :
+          <div key={i}>
+            {e?.account.includes(JSON.parse(loggedInUser)?.id) ?
 
               <div
                 key={i}
-
 
                 className='border border-solid p-3 my-8 cursor-pointer rounded-tr-2xl rounded-bl-2xl'>
                 <div className='text-white flex justify-between font-Montserrat'>
@@ -88,10 +175,11 @@ const Analytics = () => {
                   <p className='tracking-wider'>{e?.end_date}</p>
                 </div>
 
-              </div>
+              </div> :
+              " "
 
             }
-          </>
+          </div>
         ))}
 
       </div>

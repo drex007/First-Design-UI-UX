@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import toast, { Toaster } from 'react-hot-toast';
+import { AxiosConfig } from "./axiosConfig";
 
 export const AppContext = React.createContext();
 
@@ -20,12 +21,13 @@ export const AppContextProvider = ({ children }) => {
   const [telegramLoadingState, setTelegramLoadingState] = useState(false)
   const [signUpLoadingState, setSignUpLoadingState] = useState(false)
   const [account, setAccount] = useState({})
+  const [redeemLoadingState, setRedeemLoadingState] = useState(false)
 
   //For getting users request token on Login
   const getXLoginOauth = async () => {
 
     try {
-      const account = await axios.get(`${backendUrl}/account/login-x-oauth`)
+      const account = await AxiosConfig.get(`${backendUrl}/account/login-x-oauth`)
       setLoginOauth(account.data)
       window.open(`https://api.twitter.com/oauth/authorize?oauth_token=${loginOauth?.oauth_token}&oauth_token_secret=${loginOauth?.oauth_token_secret}&oauth_callback_confirmed=true`)
 
@@ -33,10 +35,10 @@ export const AppContextProvider = ({ children }) => {
     }
 
   }
- //For getting user account from backend after giving acccess to twitter on login, paylod {oauth_token and oauth_verifier}
+  //For getting user account from backend after giving acccess to twitter on login, paylod {oauth_token and oauth_verifier}
   const login = async (data) => {
     try {
-      const req = await axios.post(`${backendUrl}/account/login`, data)
+      const req = await AxiosConfig.post(`${backendUrl}/account/login`, data)
       setCurrentUser(req.data)
       setAccount(req.data)
       localStorage.setItem("monkeyfi-loggedIn", JSON.stringify(req.data))
@@ -48,9 +50,8 @@ export const AppContextProvider = ({ children }) => {
   //For getting tasks available
   const getTasks = async () => {
     try {
-      const task = await axios.get(`${backendUrl}/task/all`)
+      const task = await AxiosConfig.get(`${backendUrl}/task/all`)
       setTasks(task.data)
-      console.log(task.data, 'TASKS');
 
     } catch (error) {
     }
@@ -60,10 +61,16 @@ export const AppContextProvider = ({ children }) => {
   const getTwitterOauth = async () => {
     setConnectTwitterLoadingState(true)
     try {
-      const oauthReq = await axios.get(`${backendUrl}/account/x-oauth`)
-      setOauth(oauthReq.data)
-      setConnectTwitterLoadingState(false)
-      window.open(`https://api.twitter.com/oauth/authorize?oauth_token=${oauth?.oauth_token}&oauth_token_secret=${oauth?.oauth_token_secret}&oauth_callback_confirmed=true`)
+
+      const oauthReq = await AxiosConfig.get(`${backendUrl}/account/x-oauth`)
+      if (oauthReq.status === 200 && oauthReq.data !== undefined) {
+
+        setOauth(oauthReq.data)
+
+        setConnectTwitterLoadingState(false)
+        window.open(`https://api.twitter.com/oauth/authorize?oauth_token=${oauth?.oauth_token}&oauth_token_secret=${oauth?.oauth_token_secret}&oauth_callback_confirmed=true`)
+        // window.open("https://www.facebook.com")
+      }
 
     } catch (error) {
       setConnectTwitterLoadingState(false)
@@ -72,11 +79,11 @@ export const AppContextProvider = ({ children }) => {
 
   }
 
-// For getting user twitter details on connecting twitter account
+  // For getting user twitter details on connecting twitter account
   const getUserTwitterDetails = async (data) => {
     setGetTwitterDetailsLoadingState(true)
     try {
-      const oauthReq = await axios.post(`${backendUrl}/account/get-x-details`, data)
+      const oauthReq = await AxiosConfig.post(`${backendUrl}/account/get-x-details`, data)
       localStorage.setItem('monkeyfi-twitter', JSON.stringify(oauthReq.data))
       setGetTwitterDetailsLoadingState(false)
 
@@ -87,7 +94,7 @@ export const AppContextProvider = ({ children }) => {
     }
 
   }
- //For redirecting user to twitter bot page
+  //For redirecting user to twitter bot page
   const connectTelegramBot = async () => {
     setTelegramLoadingState(true)
     try {
@@ -106,13 +113,13 @@ export const AppContextProvider = ({ children }) => {
     try {
       if (!data?.x_id || data?.x_id === '') return toast.error("Please connect twitter")
       if (!data?.tg_id || data?.tg_id === '') return toast.error("Please connect twitter")
-      const req = await axios.post(`${backendUrl}/account/signup`, data)
+      const req = await AxiosConfig.post(`${backendUrl}/account/signup`, data)
       if (req.status == 200) {
         toast.success("Signup successful")
         setSignUpLoadingState(false)
         return true
       }
-      
+
     } catch (error) {
       setSignUpLoadingState(false)
       toast.error("Signup failed, try again")
@@ -125,21 +132,57 @@ export const AppContextProvider = ({ children }) => {
   //For adding each account to task once yhe link is clicked 
   const addAccountToTask = async (data) => {
     try {
-      const req = await axios.post(`${backendUrl}/task/add-account`, data)
-     
+      const req = await AxiosConfig.post(`${backendUrl}/task/add-account`, data)
+      if (req.status === 200) {
+        const task = await AxiosConfig.get(`${backendUrl}/task/all`)
+        console.log(task.data, 'TASK');
+        setTasks(task.data)
+
+      }
+
     } catch (error) {
-      
+
     }
 
   }
 
   const getUserAccount = async (data) => {
     try {
-      const req = await axios.post(`${backendUrl}/account/user`, data)
+      const req = await AxiosConfig.post(`${backendUrl}/account/user`, data)
       setAccount(req.data)
-     
+
     } catch (error) {
-      
+
+    }
+
+  }
+
+  const redeemReferralCode = async (data) => {
+    try {
+      if (!data?.referee_code || data?.referee_code === '') return toast.error('Enter referee code')
+      setRedeemLoadingState(true)
+      const req = await AxiosConfig.post(`${backendUrl}/account/redeem-code`, data)
+      if (req.status == 200) {
+        setAccount(req.data)
+        setRedeemLoadingState(false)
+        toast.success('Code redeem')
+
+      }
+
+    } catch (error) {
+      setRedeemLoadingState(false)
+      toast.error(error?.response?.data ?? "Error occured, try again")
+
+    }
+
+  }
+
+  const updateTelegram = async (data) => {
+    try {
+
+      const req = await AxiosConfig.post(`${backendUrl}/account/update-telegram`, data)
+
+    } catch (error) {
     }
 
   }
@@ -172,7 +215,10 @@ export const AppContextProvider = ({ children }) => {
         setSignUpLoadingState,
         addAccountToTask,
         account,
-        getUserAccount
+        getUserAccount,
+        redeemLoadingState,
+        redeemReferralCode,
+        updateTelegram
 
       }} >
         {children}
