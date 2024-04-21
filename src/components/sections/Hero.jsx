@@ -5,7 +5,7 @@ import { AppContext } from '../../context'
 
 
 const Hero = () => {
-  const { getXLoginOauth, currentUser, setCurrentUser, setAccount, logout } = useContext(AppContext)
+  const { getXLoginOauth, currentUser, setCurrentUser, setAccount, logout, account } = useContext(AppContext)
   const loggedInUser = localStorage.getItem("monkeyfi-loggedIn")
   
 
@@ -21,7 +21,7 @@ const Hero = () => {
           <p className='flex text-[18px] font-light mt-8 justify-center'>Discover mindblowing projects, join the gaming and AI revolution and get rewarded.</p>
         </div>
         {loggedInUser ? <div className='mt-10 flex justify-center space-x-4'>
-          <button className='py-2 px-12 text-white font-poppins border bg-gradient-to-r from-yellow-500 to-red-600 cursor-pointer rounded-md'>@{JSON.parse(loggedInUser)?.x_username}</button>
+          {account && Object.keys(account).length !==0 && <button className='py-2 px-12 text-white font-poppins border bg-gradient-to-r from-yellow-500 to-red-600 cursor-pointer rounded-md'>@{JSON.parse(loggedInUser)?.x_username}</button>}
           <button className='py-2 px-12 text-white font-poppins border bg-gradient-to-r from-yellow-500 to-red-600 cursor-pointer rounded-md' onClick={() => logout()}>Log out</button>
 
         </div> :

@@ -7,7 +7,7 @@ export const AppContext = React.createContext();
 
 
 const backendUrl = import.meta.env.VITE_BACKEND_URL
-// const frontendUrl = import.meta.env.VITE_FRONTEND_URL
+const frontendUrl = import.meta.env.VITE_FRONTEND_URL
 const TelegramBotLink = import.meta.env.VITE_TELEGRAM_BOT_LINK
 
 export const AppContextProvider = ({ children }) => {
@@ -190,6 +190,7 @@ export const AppContextProvider = ({ children }) => {
   const logout = () => {
     localStorage.clear()
     setAccount(null)
+    window.location.href = frontendUrl
     return toast.success("Logout successful")
   }
 
