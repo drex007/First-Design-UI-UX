@@ -21,7 +21,7 @@ const Featured = () => {
   }, [])
 
   return (
-    <div className='mt-4 py-8'>
+    <div className='mt-4 py-8 '>
       <div className='rounded-sm bg-black/20 py-8 px-16 flex justify-center'>
         <h1 className='text-white font-bold font-irish text-[30px]'>Dashboard</h1>
 
@@ -33,7 +33,10 @@ const Featured = () => {
         <div className='flex flex-col border border-solid lg:w-1/2 p-10 rounded-lg justify-center mt-5'>
           <img src={image2} alt="" className='lg:w-[150px] w-[80px] mx-auto ' />
           <h1 className='text-white text-[20px] font-irish my-2 text-center tracking-widest' >Points Earned</h1>
-          <h1 className='text-white text-[20px] font-irish my-2 text-center tracking-wider' >{account?.points ?? 0} KRP</h1>
+          <div className='flex justify-between px-10'>
+            <h1 className='text-white text-[20px] font-irish my-2 text-center tracking-wider' >Tasks: {account?.points ?? 0} KRP</h1>
+            <h1 className='text-white text-[20px] font-irish my-2 text-center tracking-wider' >Bot Points: {account?.bot_point ?? 0} KRP</h1>
+          </div>
         </div>
 
         <div className='flex flex-col border border-solid lg:w-1/2 p-10 rounded-lg justify-center'>

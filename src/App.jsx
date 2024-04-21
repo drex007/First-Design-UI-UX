@@ -16,8 +16,8 @@ function App() {
       <Routes>
         <Route path="/" element={<Landing />} />
 
-        <Route path="/signup" element={<Signup />} />
-        <Route path="/oauth/twitter" element={<OauthVerificationPage />} />
+        {/* <Route path="/signup" element={<Signup />} /> */}
+        {/* <Route path="/oauth/twitter" element={<OauthVerificationPage />} /> */}
         <Route path="/logged-in" element={<LoggedIn />} />
       </Routes>
     </BrowserRouter>

@@ -7,7 +7,7 @@ export const AppContext = React.createContext();
 
 
 const backendUrl = import.meta.env.VITE_BACKEND_URL
-const frontendUrl = import.meta.env.VITE_FRONTEND_URL
+// const frontendUrl = import.meta.env.VITE_FRONTEND_URL
 const TelegramBotLink = import.meta.env.VITE_TELEGRAM_BOT_LINK
 
 export const AppContextProvider = ({ children }) => {
@@ -20,7 +20,7 @@ export const AppContextProvider = ({ children }) => {
   const [currentTelegramUser, setCurrentTelegramUser] = useState({})
   const [telegramLoadingState, setTelegramLoadingState] = useState(false)
   const [signUpLoadingState, setSignUpLoadingState] = useState(false)
-  const [account, setAccount] = useState({})
+  const [account, setAccount] = useState(null)
   const [redeemLoadingState, setRedeemLoadingState] = useState(false)
 
   //For getting users request token on Login
@@ -187,6 +187,12 @@ export const AppContextProvider = ({ children }) => {
 
   }
 
+  const logout = () => {
+    localStorage.clear()
+    setAccount(null)
+    return toast.success("Logout successful")
+  }
+
 
   return (
     <>
@@ -218,7 +224,8 @@ export const AppContextProvider = ({ children }) => {
         getUserAccount,
         redeemLoadingState,
         redeemReferralCode,
-        updateTelegram
+        updateTelegram,
+        logout
 
       }} >
         {children}

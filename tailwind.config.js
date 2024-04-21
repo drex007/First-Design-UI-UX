@@ -25,8 +25,16 @@ export default {
       // => @media (min-width: 1536px) { ... }
     },
     extend: {
+      backgroundSize:{
+        '40%':'40%',
+        '70%':'70%'
+      },
+      backgroundImage:{
+        'dragon': "url('/src/assets/bg.png')"
+      },
       colors: {
-        "primary": '#050133',
+        "primary": '#0C0C0C',
+        // "primary": '#050133',
         "primary-shadow": '#3E7EEB',
         "primary-button": '#7167ED',
         "primary-card": "#0E0949"

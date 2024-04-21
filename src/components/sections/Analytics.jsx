@@ -79,7 +79,7 @@ const Analytics = () => {
       {!account?.referee || !account?.tg_id ?
 
         <div>
-          <p className='text-white  bg-black/20 py-4 flex justify-center font-irish text-[20px]'>One Time Tasks</p>
+          <div className='text-white py-4 flex justify-center font-irish text-[20px]'>One Time Tasks</div>
           <div
             className='border border-solid p-3 my-8 cursor-pointer rounded-tr-2xl rounded-bl-2xl'>
             <div className='text-white  font-Montserrat'>
@@ -92,7 +92,7 @@ const Analytics = () => {
                   <button
 
                     onClick={() => redeemReferralCode(formData)}
-                    className='bg-primary-button py-2 px-4 text-[15px] rounded-md'>Redeem</button>
+                    className='bg-gradient-to-r from-yellow-500 to-red-600 border-2 py-2 px-4 text-[15px] rounded-md'>Redeem</button>
                 }
               </div>
             </div>
@@ -114,8 +114,8 @@ const Analytics = () => {
         : ""
 
       }
-      <div className='rounded-sm bg-black/20 py-4 px-16  '>
-        <p className='text-white flex justify-center font-irish text-[20px]'>Daily Tasks</p>
+      <div className='rounded-sm  py-4   '>
+        <p className='text-white flex justify-center font-irish text-[20px] py-4'>Daily Tasks</p>
       </div>
       <div className='lg:text-[15px] text-[12px]'>
 
@@ -152,7 +152,7 @@ const Analytics = () => {
 
       </div>
 
-      <div className='rounded-sm bg-black/20 py-4 px-16 my-8 '>
+      <div className='rounded-sm  py-4 px-16 my-8 '>
         <p className='flex text-white justify-center font-irish text-[20px] items-center'>Pending Tasks  <div className='ml-4'><PendingTaskLoader /></div> </p>
       </div>
       <div className='lg:text-[15px] text-[12px]'>
