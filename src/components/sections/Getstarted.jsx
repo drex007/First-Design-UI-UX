@@ -17,10 +17,10 @@ const Getstarted = () => {
           <div className='mt-6 flex flex-col justify-center space-x-1'>
             <div className='flex justify-center space-x-3'>
               <div className='p-1 border-2 rounded-lg'>
-                <img src={tg} alt="" className='w-[20px] cursor-pointer ' />
+               <a href="https://t.me/KruxAI"> <img src={tg} alt="" className='w-[20px] cursor-pointer ' /></a>
               </div>
               <div className='p-1 border-2 rounded-lg'>
-                <img src={tw} alt="" className='w-[20px] cursor-pointer' />
+               <a href="https://twitter.com/KruxAI_XYZ"> <img src={tw} alt="" className='w-[20px] cursor-pointer' /></a>
               </div>
             </div>
           </div>

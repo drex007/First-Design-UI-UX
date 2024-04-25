@@ -3,10 +3,11 @@ import { AppContext } from '../../context'
 import { useContext } from 'react'
 import PendingTaskLoader from '../buttons/PendingTask'
 import ButtonLoaderOne from '../buttons/ButtonLoaderOne'
+import toast from 'react-hot-toast'
 
 const Analytics = () => {
 
-  const { getTasks, tasks, addAccountToTask, redeemReferralCode, redeemLoadingState, account, connectTelegramBot, updateTelegram, setCurrentTelegramUser } = useContext(AppContext)
+  const { getTasks, tasks, addAccountToTask, redeemReferralCode, redeemLoadingState, account, connectTelegramBot, updateTelegram, setCurrentTelegramUser, updateOneTimeTask } = useContext(AppContext)
   const loggedInUser = localStorage.getItem("monkeyfi-loggedIn")
   var currentDate = new Date()
 
@@ -26,6 +27,10 @@ const Analytics = () => {
 
   const taskLinkButton = async (link) => {
     window.open(link)
+  }
+
+  const handleOneTimeTask = async (data) => {
+    const res = await updateOneTimeTask(data)
   }
 
   const getTelegramDetails = () => {
@@ -76,12 +81,12 @@ const Analytics = () => {
 
   return (
     <div>
+      <div className='text-white py-4 flex justify-center font-poppins text-[20px]'>One Time Tasks</div>
       {!account?.referee || !account?.tg_id ?
 
         <div>
-          <div className='text-white py-4 flex justify-center font-irish text-[20px]'>One Time Tasks</div>
           <div
-            className='border border-solid p-3 my-8 cursor-pointer rounded-tr-2xl rounded-bl-2xl'>
+            className='border border-solid p-3 my-8 cursor-pointer rounded-tr-2xl rounded-bl-2xl border-yellow-500'>
             <div className='text-white  font-Montserrat'>
               <p className='tracking-wider my-2'>Reedem referral code</p>
               <div className='flex justify-between'>
@@ -100,7 +105,7 @@ const Analytics = () => {
           </div>
 
           {!account?.tg_id ? <div
-            className='border border-solid p-3 my-8 cursor-pointer rounded-tr-2xl rounded-bl-2xl' onClick={() => connectTelegramBot()}>
+            className='border border-solid p-3 my-8 cursor-pointer rounded-tr-2xl rounded-bl-2xl border-yellow-500' onClick={() => connectTelegramBot()}>
             <div className='text-white  font-Montserrat' >
               <p className='tracking-wider my-2'>Connect Telegram</p>
             </div>
@@ -114,8 +119,68 @@ const Analytics = () => {
         : ""
 
       }
+      <div className='text-white '>
+
+        {!account?.twitter_task && <div
+          onClick={() => {
+            handleOneTimeTask({ x_id: account?.x_id, task: "twitter_task" })
+            taskLinkButton("https://x.com/krux_xyz")
+
+          }}
+          className='border border-solid p-5 my-8 cursor-pointer rounded-tr-2xl rounded-bl-2xl text-[13px] border-yellow-500'>
+          <div className='text-white flex justify-between font-Montserrat'>
+            <p className='tracking-wider'>Follow KruxAI on X</p>
+            <p></p>
+          </div>
+
+          <div className='text-white flex justify-between font-Montserrat'>
+            <p className='tracking-wider'></p>
+            <p className='tracking-wider'></p>
+          </div>
+
+        </div>}
+        {!account?.telegram_task && <div
+          onClick={() => {
+            if(account?.tg_id === null || account?.tg_id === "") return toast.error("Connect your telegram")
+            handleOneTimeTask({ x_id: account?.x_id, task: "telegram_group" })
+            taskLinkButton("https://t.me/KruxAI")
+
+          }}
+          className='border border-solid p-5 my-8 cursor-pointer rounded-tr-2xl rounded-bl-2xl text-[13px] border-yellow-500 '>
+          <div className='text-white flex justify-between font-Montserrat'>
+            <p className='tracking-wider'>Join our telegram group</p>
+            <p></p>
+          </div>
+
+          <div className='text-white flex justify-between font-Montserrat'>
+            <p className='tracking-wider'></p>
+            <p className='tracking-wider'></p>
+          </div>
+
+        </div>}
+        {!account?.telegram_channel_task && <div
+          onClick={() => {
+            if(account?.tg_id === null || account?.tg_id === "") return toast.error("Connect your telegram")
+            handleOneTimeTask({ x_id: account?.x_id, task: "telegram_channel_task" })
+            taskLinkButton("https://t.me/KruxAI_Channel")
+
+          }}
+          className='border border-solid p-5 my-8 cursor-pointer rounded-tr-2xl rounded-bl-2xl text-[13px] border-yellow-500'>
+          <div className='text-white flex justify-between font-Montserrat'>
+            <p className='tracking-wider'>Join our telegram channel</p>
+            <p></p>
+          </div>
+
+          <div className='text-white flex justify-between font-Montserrat'>
+            <p className='tracking-wider'></p>
+            <p className='tracking-wider'></p>
+          </div>
+
+        </div>}
+      </div>
+
       <div className='rounded-sm  py-4   '>
-        <p className='text-white flex justify-center font-irish text-[20px] py-4'>Daily Tasks</p>
+        <p className='text-white flex justify-center font-poppins text-[20px] py-4'>Daily Tasks</p>
       </div>
       <div className='lg:text-[15px] text-[12px]'>
 
@@ -130,7 +195,7 @@ const Analytics = () => {
                   taskLinkButton(e?.task_link)
                   addAccountToTask(data)
                   setReload(true)
-  
+
                 }}
 
                 className='border border-solid p-3 my-8 cursor-pointer rounded-tr-2xl rounded-bl-2xl'>
@@ -153,13 +218,13 @@ const Analytics = () => {
       </div>
 
       <div className='rounded-sm  py-4 px-16 my-8 '>
-        <p className='flex text-white justify-center font-irish text-[20px] items-center'>Pending Tasks  <div className='ml-4'><PendingTaskLoader /></div> </p>
+        <p className='flex text-white justify-center font-poppins text-[20px] items-center'>Pending Tasks  <div className='ml-4'><PendingTaskLoader /></div> </p>
       </div>
       <div className='lg:text-[15px] text-[12px]'>
 
         {tasks?.map((e, i) => (
           <div key={i}>
-            {e?.account.includes(JSON.parse(loggedInUser)?.id) ?
+            {e?.account.includes(JSON.parse(loggedInUser)?.id) && new Date(e?.end_date) >= new Date() ?
 
               <div
                 key={i}

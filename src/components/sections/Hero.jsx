@@ -16,7 +16,7 @@ const Hero = () => {
     <div className=' bg-dragon w-full bg-center lg:bg-40% flex justify-center py-20 bg-no-repeat bg-70%'>
       <div>
         <div className='justify-center w-full lg:text-[80px] text-[40px]  text-white font-bold'>
-          Learn, Interact and Get Earn
+          Learn, Interact and Earn
 
           <p className='flex text-[18px] font-light mt-8 justify-center'>Discover mindblowing projects, join the gaming and AI revolution and get rewarded.</p>
         </div>

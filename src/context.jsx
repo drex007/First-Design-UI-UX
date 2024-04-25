@@ -23,6 +23,8 @@ export const AppContextProvider = ({ children }) => {
   const [account, setAccount] = useState(null)
   const [redeemLoadingState, setRedeemLoadingState] = useState(false)
 
+  console.log(account, 'ACCOUNT');
+
   //For getting users request token on Login
   const getXLoginOauth = async () => {
 
@@ -165,7 +167,7 @@ export const AppContextProvider = ({ children }) => {
       if (req.status == 200) {
         setAccount(req.data)
         setRedeemLoadingState(false)
-        toast.success('Code redeem')
+        toast.success('Code redeemed successfully')
 
       }
 
@@ -193,6 +195,20 @@ export const AppContextProvider = ({ children }) => {
     window.location.href = frontendUrl
     return toast.success("Logout successful")
   }
+
+
+
+  const updateOneTimeTask = async (data) => {
+   try {
+    const req = await AxiosConfig.post(`${backendUrl}/account/one-time-task`, data)
+    if (req.status == 200) { 
+    }  
+   } catch (error) {
+    
+   }
+  }
+
+  
 
 
   return (
@@ -226,7 +242,8 @@ export const AppContextProvider = ({ children }) => {
         redeemLoadingState,
         redeemReferralCode,
         updateTelegram,
-        logout
+        logout, 
+        updateOneTimeTask
 
       }} >
         {children}
