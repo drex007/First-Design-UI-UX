@@ -22,16 +22,20 @@ export const AppContextProvider = ({ children }) => {
   const [signUpLoadingState, setSignUpLoadingState] = useState(false)
   const [account, setAccount] = useState(null)
   const [redeemLoadingState, setRedeemLoadingState] = useState(false)
+  const [reloadTask, setReloadTask] = useState(false)
 
-  console.log(account, 'ACCOUNT');
+
 
   //For getting users request token on Login
   const getXLoginOauth = async () => {
 
     try {
-      const account = await AxiosConfig.get(`${backendUrl}/account/login-x-oauth`)
-      setLoginOauth(account.data)
-      window.open(`https://api.twitter.com/oauth/authorize?oauth_token=${loginOauth?.oauth_token}&oauth_token_secret=${loginOauth?.oauth_token_secret}&oauth_callback_confirmed=true`)
+      const req = await AxiosConfig.get(`${backendUrl}/account/login-x-oauth`)
+      if (req.status === 200) {
+        setLoginOauth(req.data)
+        window.location.replace(`https://api.twitter.com/oauth/authorize?oauth_token=${req?.data?.oauth_token}&oauth_token_secret=${req?.data?.oauth_token_secret}&oauth_callback_confirmed=true`)
+
+      }
 
     } catch (error) {
     }
@@ -52,8 +56,11 @@ export const AppContextProvider = ({ children }) => {
   //For getting tasks available
   const getTasks = async () => {
     try {
-      const task = await AxiosConfig.get(`${backendUrl}/task/all`)
-      setTasks(task.data)
+      if (account !== null) {
+
+        const task = await AxiosConfig.get(`${backendUrl}/task/all`)
+        setTasks(task.data)
+      }
 
     } catch (error) {
     }
@@ -137,7 +144,6 @@ export const AppContextProvider = ({ children }) => {
       const req = await AxiosConfig.post(`${backendUrl}/task/add-account`, data)
       if (req.status === 200) {
         const task = await AxiosConfig.get(`${backendUrl}/task/all`)
-        console.log(task.data, 'TASK');
         setTasks(task.data)
 
       }
@@ -165,8 +171,8 @@ export const AppContextProvider = ({ children }) => {
       setRedeemLoadingState(true)
       const req = await AxiosConfig.post(`${backendUrl}/account/redeem-code`, data)
       if (req.status == 200) {
-        setAccount(req.data)
         setRedeemLoadingState(false)
+        setReloadTask(!reloadTask)
         toast.success('Code redeemed successfully')
 
       }
@@ -183,6 +189,7 @@ export const AppContextProvider = ({ children }) => {
     try {
 
       const req = await AxiosConfig.post(`${backendUrl}/account/update-telegram`, data)
+      setReloadTask(!reloadTask)
 
     } catch (error) {
     }
@@ -192,23 +199,25 @@ export const AppContextProvider = ({ children }) => {
   const logout = () => {
     localStorage.clear()
     setAccount(null)
-    window.location.href = frontendUrl
+    window.location.replace(frontendUrl)
     return toast.success("Logout successful")
   }
 
 
 
   const updateOneTimeTask = async (data) => {
-   try {
-    const req = await AxiosConfig.post(`${backendUrl}/account/one-time-task`, data)
-    if (req.status == 200) { 
-    }  
-   } catch (error) {
-    
-   }
+    try {
+      const req = await AxiosConfig.post(`${backendUrl}/account/one-time-task`, data)
+      if (req.status == 200) {
+        setReloadTask(!reloadTask)
+      }
+    } catch (error) {
+      return False
+
+    }
   }
 
-  
+
 
 
   return (
@@ -242,8 +251,9 @@ export const AppContextProvider = ({ children }) => {
         redeemLoadingState,
         redeemReferralCode,
         updateTelegram,
-        logout, 
-        updateOneTimeTask
+        logout,
+        updateOneTimeTask,
+        reloadTask
 
       }} >
         {children}

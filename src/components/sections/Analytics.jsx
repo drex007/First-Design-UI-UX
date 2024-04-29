@@ -7,9 +7,8 @@ import toast from 'react-hot-toast'
 
 const Analytics = () => {
 
-  const { getTasks, tasks, addAccountToTask, redeemReferralCode, redeemLoadingState, account, connectTelegramBot, updateTelegram, setCurrentTelegramUser, updateOneTimeTask } = useContext(AppContext)
+  const { getUserAccount, getTasks, tasks, addAccountToTask, redeemReferralCode, redeemLoadingState, account, connectTelegramBot, updateTelegram, setCurrentTelegramUser, updateOneTimeTask, reloadTask } = useContext(AppContext)
   const loggedInUser = localStorage.getItem("monkeyfi-loggedIn")
-  var currentDate = new Date()
 
   const localStorageTelegram = localStorage.getItem("monkeyfi-telegram")
   const [reload, setReload] = useState(false)
@@ -20,10 +19,6 @@ const Analytics = () => {
     referee_code: ''
   })
 
-  const [telegramformData, setTelegramFormData] = useState({
-    x_id: '',
-    referee_code: ''
-  })
 
   const taskLinkButton = async (link) => {
     window.open(link)
@@ -79,6 +74,13 @@ const Analytics = () => {
 
   }, [account])
 
+  useEffect(() => {
+    const data = { x_id: JSON.parse(loggedInUser)?.x_id }
+    getUserAccount(data)
+
+  }, [reloadTask])
+
+
   return (
     <div>
       <div className='text-white py-4 flex justify-center font-poppins text-[20px]'>One Time Tasks</div>
@@ -122,9 +124,12 @@ const Analytics = () => {
       <div className='text-white '>
 
         {!account?.twitter_task && <div
-          onClick={() => {
-            handleOneTimeTask({ x_id: account?.x_id, task: "twitter_task" })
-            taskLinkButton("https://x.com/krux_xyz")
+          onClick={ () => {
+            taskLinkButton("https://x.com/kruxai_xyz")
+             handleOneTimeTask({ x_id: account?.x_id, task: "twitter_task" })
+            
+
+            
 
           }}
           className='border border-solid p-5 my-8 cursor-pointer rounded-tr-2xl rounded-bl-2xl text-[13px] border-yellow-500'>
@@ -140,10 +145,14 @@ const Analytics = () => {
 
         </div>}
         {!account?.telegram_task && <div
-          onClick={() => {
-            if(account?.tg_id === null || account?.tg_id === "") return toast.error("Connect your telegram")
-            handleOneTimeTask({ x_id: account?.x_id, task: "telegram_group" })
+          onClick={ () => {
+            if (account?.tg_id === null || account?.tg_id === "") return toast.error("Connect your telegram")
             taskLinkButton("https://t.me/KruxAI")
+            handleOneTimeTask({ x_id: account?.x_id, task: "telegram_group" })
+              
+
+            
+
 
           }}
           className='border border-solid p-5 my-8 cursor-pointer rounded-tr-2xl rounded-bl-2xl text-[13px] border-yellow-500 '>
@@ -159,10 +168,15 @@ const Analytics = () => {
 
         </div>}
         {!account?.telegram_channel_task && <div
-          onClick={() => {
-            if(account?.tg_id === null || account?.tg_id === "") return toast.error("Connect your telegram")
-            handleOneTimeTask({ x_id: account?.x_id, task: "telegram_channel_task" })
+          onClick={ () => {
+            if (account?.tg_id === null || account?.tg_id === "") return toast.error("Connect your telegram")
             taskLinkButton("https://t.me/KruxAI_Channel")
+            handleOneTimeTask({ x_id: account?.x_id, task: "telegram_channel_task" })
+          
+            
+
+            
+
 
           }}
           className='border border-solid p-5 my-8 cursor-pointer rounded-tr-2xl rounded-bl-2xl text-[13px] border-yellow-500'>
